@@ -5,8 +5,8 @@ services:
     restart: always
 
     environment:
-      - POSTGRES_USER=postgress
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
     volumes:
       - db-data:/var/lib/postgresql/data
