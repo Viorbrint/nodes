@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -29,8 +30,11 @@ export class NotesController {
   @ApiResponse({ status: 200, type: [Note] })
   @ApiOperation({ summary: 'Getting a list of notes' })
   @Get()
-  findAll() {
-    return this.notesService.findAll();
+  findAll(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
+  ) {
+    return this.notesService.findAll({ page, limit });
   }
 
   @ApiResponse({ status: 200, type: Note })

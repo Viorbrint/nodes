@@ -11,8 +11,30 @@ export class NotesService {
     return this.prismaService.note.create({ data: createNoteDto });
   }
 
-  findAll() {
-    return this.prismaService.note.findMany();
+  async findAll({ page = 1, limit = 10 }: { page: number; limit: number }) {
+    const skip = limit * (page - 1);
+
+    const [total, data] = await Promise.all([
+      this.prismaService.note.count(),
+      this.prismaService.note.findMany({
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      pagination: {
+        limit,
+        total,
+        page,
+        totalPages,
+        prevPage: page === 1 ? null : page - 1,
+        nextPage: page === totalPages ? null : page + 1,
+      },
+      data,
+    };
   }
 
   findOne(id: number) {
