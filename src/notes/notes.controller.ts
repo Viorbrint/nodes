@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -29,6 +30,7 @@ import {
   SearchingOptions,
   SearchingParams,
 } from 'src/complex-prisma-query/decorators/searching-params.decorator';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @ApiTags('Notes')
 @Controller('notes')
@@ -65,7 +67,7 @@ export class NotesController {
     description: 'property:searchString',
   })
   @Get()
-  findAll(
+  async findAll(
     @PaginationParams()
     pagination: PaginationOptions,
     @SortingParams(['name', 'createdAt', 'location'])
@@ -75,35 +77,63 @@ export class NotesController {
     @SearchingParams(['name', 'location', 'content'])
     searching: SearchingOptions,
   ) {
-    return this.notesService.findAll({
+    const response = await this.notesService.findAll({
       pagination,
       sorting,
       filtering,
       searching,
     });
+
+    if (!response.data.length) {
+      throw new NotFoundException(`No notes found matching your request.`);
+    }
+
+    return response;
   }
 
   @ApiResponse({ status: 200, type: Note })
   @ApiOperation({ summary: 'Receiving a note by its ID' })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.notesService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const note = await this.notesService.findOne(id);
+    if (!note) {
+      throw new NotFoundException(`Note with id = ${id} does not exist.`);
+    }
+    return note;
   }
 
   @ApiResponse({ status: 200, type: Note })
   @ApiOperation({ summary: 'Change information about an existing note' })
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateNoteDto: UpdateNoteDto,
   ) {
-    return this.notesService.update(id, updateNoteDto);
+    try {
+      const note = await this.notesService.update(id, updateNoteDto);
+      return note;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new NotFoundException(`Note with id = ${id} does not exist.`);
+      } else {
+        throw error;
+      }
+    }
   }
 
   @ApiResponse({ status: 200, type: Note })
   @ApiOperation({ summary: 'Deleting a note' })
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.notesService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const note = await this.notesService.remove(id);
+      return note;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new NotFoundException(`Note with id = ${id} does not exist.`);
+      } else {
+        throw error;
+      }
+    }
   }
 }
