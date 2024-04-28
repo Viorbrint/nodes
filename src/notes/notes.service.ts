@@ -2,39 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  ComplexPrismaQueryService,
+  QueryOptions,
+} from 'src/complex-prisma-query/complex-prisma-query.service';
 
 @Injectable()
 export class NotesService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private complexPrismaQueryService: ComplexPrismaQueryService,
+  ) {}
 
   create(createNoteDto: CreateNoteDto) {
     return this.prismaService.note.create({ data: createNoteDto });
   }
 
-  async findAll({ page = 1, limit = 10 }: { page: number; limit: number }) {
-    const skip = limit * (page - 1);
-
-    const [total, data] = await Promise.all([
-      this.prismaService.note.count(),
-      this.prismaService.note.findMany({
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      }),
-    ]);
-    const totalPages = Math.ceil(total / limit);
-
-    return {
-      pagination: {
-        limit,
-        total,
-        page,
-        totalPages,
-        prevPage: page === 1 ? null : page - 1,
-        nextPage: page === totalPages ? null : page + 1,
-      },
-      data,
-    };
+  findAll(options: QueryOptions) {
+    return this.complexPrismaQueryService.query(
+      this.prismaService.note,
+      options,
+    );
   }
 
   findOne(id: number) {
