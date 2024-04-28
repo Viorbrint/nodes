@@ -12,7 +12,13 @@ import {
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Note } from './entities/note.entity';
 import {
   FilteringOptions,
@@ -38,33 +44,33 @@ export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
   @ApiOperation({ summary: 'Create a new note' })
-  @ApiResponse({ status: 201, type: Note })
+  @ApiCreatedResponse({ type: Note, description: 'Created' })
   @Post()
   create(@Body() createNoteDto: CreateNoteDto) {
     return this.notesService.create(createNoteDto);
   }
 
-  @ApiResponse({ status: 200, type: [Note] })
+  @ApiOkResponse({ type: [Note], description: 'Found' })
   @ApiOperation({ summary: 'Getting a list of notes' })
   @ApiQuery({ name: 'page', example: 1 })
   @ApiQuery({ name: 'limit', example: 5, description: 'maximum: 100' })
   @ApiQuery({
     name: 'sort',
-    example: 'createdAt:desc',
+    example: 'createdAt|:desc',
     required: false,
-    description: 'property:asc|desc',
+    description: '(name|createdAt|location):(asc|desc)',
   })
   @ApiQuery({
     name: 'filter',
     example: 'location:equals:home',
     required: false,
-    description: 'property:rule:value',
+    description: '(name|createdAt|location):(equals|not|gt|gte|lt|lte):value',
   })
   @ApiQuery({
     name: 'search',
     example: 'name:list',
     required: false,
-    description: 'property:searchString',
+    description: '(name|location|content):searchString',
   })
   @Get()
   async findAll(
@@ -91,7 +97,7 @@ export class NotesController {
     return response;
   }
 
-  @ApiResponse({ status: 200, type: Note })
+  @ApiOkResponse({ type: Note, description: 'Found' })
   @ApiOperation({ summary: 'Receiving a note by its ID' })
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
@@ -102,7 +108,7 @@ export class NotesController {
     return note;
   }
 
-  @ApiResponse({ status: 200, type: Note })
+  @ApiOkResponse({ type: Note, description: 'Updated' })
   @ApiOperation({ summary: 'Change information about an existing note' })
   @Patch(':id')
   async update(
@@ -121,7 +127,7 @@ export class NotesController {
     }
   }
 
-  @ApiResponse({ status: 200, type: Note })
+  @ApiOkResponse({ type: Note, description: 'Deleted' })
   @ApiOperation({ summary: 'Deleting a note' })
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
