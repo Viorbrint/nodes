@@ -6,6 +6,7 @@ import { ComplexPrismaQueryService } from './complex-prisma-query/complex-prisma
 import { ComplexPrismaQueryModule } from './complex-prisma-query/complex-prisma-query.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   providers: [PrismaService, ComplexPrismaQueryService],
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
     ComplexPrismaQueryModule,
     UsersModule,
     AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
 })
 export class AppModule {}
