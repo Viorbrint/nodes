@@ -13,6 +13,7 @@ import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -39,6 +40,7 @@ import {
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { GetUser } from 'src/users/decorators/get-user.decorator';
 
+@ApiBearerAuth()
 @ApiTags('Notes')
 @Controller('notes')
 export class NotesController {

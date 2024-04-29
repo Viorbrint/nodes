@@ -30,10 +30,10 @@ export class AuthService {
 
   async registration({ password, ...restData }: CreateUserDto) {
     //eslint-disable-next-line
-    const { password: hash, ...result } = await this.usersService.create({
+    const user = await this.usersService.create({
       password: await bcrypt.hash(password, 10),
       ...restData,
     });
-    return result;
+    return this.login(user);
   }
 }
