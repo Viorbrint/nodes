@@ -18,15 +18,17 @@ export class ComplexPrismaQueryService {
   async query(
     model,
     { pagination, sorting, filtering, searching }: QueryOptions,
+    authorId: number = null,
   ) {
     const sort = sorting ? this.sortOptions(sorting) : {};
     const filter = filtering ? this.filterOptions(filtering) : {};
     const search = searching ? this.searchOptions(searching) : {};
+    const author = authorId ? { authorId } : {};
 
     const prismaArgs = {
       orderBy: sort,
       where: {
-        AND: [filter, search],
+        AND: [filter, search, author],
       },
     };
 

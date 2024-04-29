@@ -15,4 +15,16 @@ model Note {
 
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
+
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int 
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  password String
+  email String @unique
+
+  notes Note[]
 }
