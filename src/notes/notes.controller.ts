@@ -127,16 +127,12 @@ export class NotesController {
     @Body() updateNoteDto: UpdateNoteDto,
     @GetUser('id') userId: number,
   ) {
-    try {
-      const note = await this.notesService.update(id, updateNoteDto, userId);
-      return note;
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        throw new NotFoundException(`Note with id = ${id} does not exist.`);
-      } else {
-        throw error;
-      }
+    const note = await this.notesService.findOne(id, userId);
+    if (!note) {
+      throw new NotFoundException(`Note with id = ${id} does not exist.`);
     }
+
+    return this.notesService.update(id, updateNoteDto, userId);
   }
 
   @ApiOkResponse({ type: Note, description: 'Deleted' })
