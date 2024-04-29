@@ -7,9 +7,18 @@ import { ComplexPrismaQueryModule } from './complex-prisma-query/complex-prisma-
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
-  providers: [PrismaService, ComplexPrismaQueryService],
+  providers: [
+    PrismaService,
+    ComplexPrismaQueryService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
   imports: [
     PrismaModule,
     NotesModule,
