@@ -1,3 +1,9 @@
 {
-  "conventionalCommits.scopes": ["postgres", "prisma", "notes", "auth"]
+  "conventionalCommits.scopes": [
+    "postgres",
+    "prisma",
+    "notes",
+    "auth",
+    "docker"
+  ]
 }
