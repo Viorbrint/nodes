@@ -14,29 +14,37 @@ export class NotesService {
     private complexPrismaQueryService: ComplexPrismaQueryService,
   ) {}
 
-  create(createNoteDto: CreateNoteDto) {
-    return this.prismaService.note.create({ data: createNoteDto });
-  }
-
-  findAll(options: QueryOptions) {
-    return this.complexPrismaQueryService.query(
-      this.prismaService.note,
-      options,
-    );
-  }
-
-  findOne(id: number) {
-    return this.prismaService.note.findUnique({ where: { id } });
-  }
-
-  update(id: number, updateNoteDto: UpdateNoteDto) {
-    return this.prismaService.note.update({
-      data: updateNoteDto,
-      where: { id },
+  create(createNoteDto: CreateNoteDto, authorId: number) {
+    return this.prismaService.note.create({
+      data: { authorId, ...createNoteDto },
     });
   }
 
-  remove(id: number) {
-    return this.prismaService.note.delete({ where: { id } });
+  findAll(options: QueryOptions, authorId) {
+    return this.complexPrismaQueryService.query(
+      this.prismaService.note,
+      options,
+      authorId,
+    );
+  }
+
+  findOne(id: number, authorId: number) {
+    return this.prismaService.note.findUnique({
+      where: {
+        id,
+        authorId,
+      },
+    });
+  }
+
+  update(id: number, updateNoteDto: UpdateNoteDto, authorId: number) {
+    return this.prismaService.note.update({
+      data: updateNoteDto,
+      where: { id, authorId },
+    });
+  }
+
+  remove(id: number, authorId) {
+    return this.prismaService.note.delete({ where: { id, authorId } });
   }
 }
