@@ -1,16 +1,4 @@
 services:
-  server:
-    container_name: server
-    build:
-      context: .
-    env_file:
-      - .env
-    ports:
-      - ${PORT}:${PORT}
-    depends_on:
-      - postgres
-    restart: always
-
   postgres:
     container_name: postgres
     image: postgres
@@ -26,6 +14,18 @@ services:
 
     ports:
       - '5432:5432'
+
+  server:
+    container_name: server
+    build:
+      context: .
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    restart: always
 
 volumes:
   db-data:
