@@ -31,7 +31,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
   @UseGuards(localAuthGuard)
   @Post('login')
-  async login(@Body() _: LoginDto, @GetUser() user) {
+  async login(@Body() _: LoginDto, @GetUser() user: AuthUser) {
     return this.authService.login(user);
   }
 
