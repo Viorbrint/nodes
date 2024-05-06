@@ -9,6 +9,6 @@ RUN yarn
 
 COPY . .
 
-RUN yarn build
+COPY ./dist ./dist
 
-CMD [ "yarn", "run", "start:prod" ]
+CMD [ "yarn", "run", "start:dev" ]

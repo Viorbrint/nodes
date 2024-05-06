@@ -26,6 +26,8 @@ services:
     depends_on:
       - postgres
     restart: always
+    volumes:
+      - .:/usr/src/app
 
 volumes:
   db-data:
