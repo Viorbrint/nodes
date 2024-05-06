@@ -29,28 +29,28 @@ export class TagsController {
   @ApiOperation({ summary: 'Create a new tag' })
   @ApiCreatedResponse({ type: Tag, description: 'Created' })
   @Post()
-  create(@Body() createTagDto: CreateTagDto) {
+  async create(@Body() createTagDto: CreateTagDto) {
     return this.tagsService.create(createTagDto);
   }
 
   @ApiOkResponse({ type: [Tag], description: 'Found' })
   @ApiOperation({ summary: 'Getting a list of tags' })
   @Get()
-  findAll() {
+  async findAll() {
     return this.tagsService.findAll();
   }
 
   @ApiOkResponse({ type: Tag, description: 'Found' })
   @ApiOperation({ summary: 'Receiving a tag by its ID' })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.tagsService.findOne(id);
   }
 
   @ApiOkResponse({ type: Tag, description: 'Updated' })
   @ApiOperation({ summary: 'Change information about an existing tag' })
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTagDto: UpdateTagDto,
   ) {
@@ -60,7 +60,7 @@ export class TagsController {
   @ApiOkResponse({ type: Tag, description: 'Deleted' })
   @ApiOperation({ summary: 'Deleting a tag' })
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     return this.tagsService.remove(id);
   }
 }
