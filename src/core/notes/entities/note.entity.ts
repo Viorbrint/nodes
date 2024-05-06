@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Tag } from 'src/core/tags/entities/tag.entity';
 
 export class Note {
   @ApiProperty({ example: '42', description: 'Note id' })
@@ -15,10 +16,17 @@ export class Note {
   content?: string;
 
   @ApiProperty({
-    example: ['Shopping', 'Food'],
+    example: [
+      {
+        name: 'Shopping',
+      },
+      {
+        name: 'Food',
+      },
+    ],
     description: 'Keywords / tags',
   })
-  keywords: string[];
+  tags: Tag[];
 
   @ApiProperty({
     example: 'Home',
