@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { ComplexPrismaQueryService } from '../complex-prisma-query/complex-prisma-query.service';
@@ -30,25 +30,39 @@ export class NotesService {
     });
   }
 
-  findAll(options: QueryOptions, authorId) {
-    return this.complexPrismaQueryService.query(
+  async findAll(options: QueryOptions, authorId) {
+    const result = await this.complexPrismaQueryService.query(
       this.prismaService.note,
       options,
       authorId,
     );
+
+    if (!result.data.length) {
+      throw new NotFoundException(`No notes found matching your request.`);
+    }
+
+    return result;
   }
 
-  findOne(id: number, authorId: number) {
-    return this.prismaService.note.findUnique({
+  async findOne(id: number, authorId: number) {
+    const note = await this.prismaService.note.findUnique({
       where: {
         id,
         authorId,
       },
       include: { tags: true },
     });
+
+    if (!note) {
+      throw new NotFoundException(`Note with id = ${id} does not exist.`);
+    }
+
+    return note;
   }
 
-  update(id: number, { tags, ...data }: UpdateNoteDto, authorId: number) {
+  async update(id: number, { tags, ...data }: UpdateNoteDto, authorId: number) {
+    await this.findOne(id, authorId);
+
     return this.prismaService.note.update({
       data: {
         ...data,
@@ -66,7 +80,9 @@ export class NotesService {
     });
   }
 
-  remove(id: number, authorId) {
+  async remove(id: number, authorId) {
+    await this.findOne(id, authorId);
+
     return this.prismaService.note.delete({
       where: { id, authorId },
       include: { tags: true },
