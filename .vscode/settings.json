@@ -4,6 +4,7 @@
     "prisma",
     "notes",
     "auth",
-    "docker"
+    "docker",
+    "tags"
   ]
 }

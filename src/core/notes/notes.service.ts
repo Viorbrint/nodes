@@ -26,6 +26,7 @@ export class NotesService {
             }
           : {},
       },
+      include: { tags: true },
     });
   }
 
@@ -43,6 +44,7 @@ export class NotesService {
         id,
         authorId,
       },
+      include: { tags: true },
     });
   }
 
@@ -50,10 +52,14 @@ export class NotesService {
     return this.prismaService.note.update({
       data: updateNoteDto,
       where: { id, authorId },
+      include: { tags: true },
     });
   }
 
   remove(id: number, authorId) {
-    return this.prismaService.note.delete({ where: { id, authorId } });
+    return this.prismaService.note.delete({
+      where: { id, authorId },
+      include: { tags: true },
+    });
   }
 }

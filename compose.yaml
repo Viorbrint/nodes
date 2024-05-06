@@ -15,19 +15,19 @@ services:
     ports:
       - '5432:5432'
 
-  server:
-    container_name: server
-    build:
-      context: .
-    env_file:
-      - .env
-    ports:
-      - ${PORT}:${PORT}
-    depends_on:
-      - postgres
-    restart: always
-    volumes:
-      - .:/usr/src/app
+  # server:
+  #   container_name: server
+  #   build:
+  #     context: .
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - ${PORT}:${PORT}
+  #   depends_on:
+  #     - postgres
+  #   restart: always
+  #   volumes:
+  #     - .:/usr/src/app
 
 volumes:
   db-data:
