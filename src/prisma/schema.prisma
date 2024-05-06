@@ -8,23 +8,30 @@ datasource db {
 }
 
 model Note {
-  name String
-  content String?
-  keywords String[]
+  name     String
+  content  String?
+  tags     Tag[]
   location String
 
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
-  author User @relation(fields: [authorId], references: [id])
-  authorId Int 
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
 }
 
 model User {
   id Int @id @default(autoincrement())
 
   password String
-  email String @unique
+  email    String @unique
+
+  notes Note[]
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
   notes Note[]
 }
