@@ -12,9 +12,20 @@ export class NotesService {
     private complexPrismaQueryService: ComplexPrismaQueryService,
   ) {}
 
-  create(createNoteDto: CreateNoteDto, authorId: number) {
+  create({ tags, ...data }: CreateNoteDto, authorId: number) {
     return this.prismaService.note.create({
-      data: { authorId, ...createNoteDto },
+      data: {
+        authorId,
+        ...data,
+        tags: tags
+          ? {
+              connectOrCreate: tags.map(({ name }) => ({
+                where: { name },
+                create: { name },
+              })),
+            }
+          : {},
+      },
     });
   }
 

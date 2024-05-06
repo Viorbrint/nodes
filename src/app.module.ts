@@ -9,6 +9,7 @@ import { PrismaModule } from './core/prisma/prisma.module';
 import { PrismaService } from './core/prisma/prisma.service';
 import { UsersModule } from './core/users/users.module';
 import { JwtAuthGuard } from './core/auth/guards/jwt-auth.guard';
+import { TagsModule } from './core/tags/tags.module';
 
 @Module({
   providers: [
@@ -26,6 +27,7 @@ import { JwtAuthGuard } from './core/auth/guards/jwt-auth.guard';
     UsersModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    TagsModule,
   ],
 })
 export class AppModule {}

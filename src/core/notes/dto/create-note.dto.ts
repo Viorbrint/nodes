@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { CreateTagDto } from 'src/core/tags/dto/create-tag.dto';
 
 export class CreateNoteDto {
   @IsNotEmpty()
@@ -17,13 +26,17 @@ export class CreateNoteDto {
   })
   readonly content?: string;
 
-  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @IsOptional()
   @IsArray()
+  @ArrayNotEmpty()
+  @Type(() => CreateTagDto)
   @ApiProperty({
-    example: ['Shopping', 'Food'],
+    example: [{ name: 'Shopping' }, { name: 'Food' }],
     description: 'Keywords / tags',
+    required: false,
   })
-  readonly keywords: string[];
+  readonly tags?: CreateTagDto[];
 
   @IsNotEmpty()
   @IsString()
