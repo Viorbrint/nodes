@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerDocumentBuilder } from './swagger/swagger-document-builder';
 
 async function bootstrap() {
   const port = process.env.PORT || 3000;
@@ -9,16 +9,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  const config = new DocumentBuilder()
-    .setTitle('Notes')
-    .setDescription('The Notes API documentation')
-    .setVersion('1.0.0')
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-
-  SwaggerModule.setup('/docs', app, document);
+  new SwaggerDocumentBuilder(app, '/docs').setupSwagger();
 
   await app.listen(port);
 }
