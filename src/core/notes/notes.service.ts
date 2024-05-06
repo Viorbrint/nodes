@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import {
-  ComplexPrismaQueryService,
-  QueryOptions,
-} from 'src/complex-prisma-query/complex-prisma-query.service';
+import { ComplexPrismaQueryService } from '../complex-prisma-query/complex-prisma-query.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { QueryOptions } from 'src/common/interfaces/query-options.interface';
 
 @Injectable()
 export class NotesService {

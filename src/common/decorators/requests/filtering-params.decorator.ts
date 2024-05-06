@@ -4,15 +4,10 @@ import {
   ExecutionContext,
 } from '@nestjs/common';
 import { Request } from 'express';
-
-export interface FilteringOptions {
-  property: string;
-  rule: string;
-  value: string;
-}
+import { FilteringOptions } from 'src/common/interfaces/filtering-options.interface';
 
 // valid filter rules
-export enum FilterRule {
+enum FilterRule {
   EQUALS = 'equals',
   NOT_EQUALS = 'not',
   GREATER_THAN = 'gt',
@@ -49,3 +44,4 @@ export const FilteringParams = createParamDecorator(
     return { property, rule, value };
   },
 );
+export { FilteringOptions };

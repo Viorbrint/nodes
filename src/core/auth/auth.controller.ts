@@ -5,8 +5,6 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { GetUser } from 'src/users/decorators/get-user.decorator';
-import { localAuthGuard } from './guards/local-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -15,10 +13,12 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { Public } from './decorators/public.decorator';
+import { Public } from '../../common/decorators/metadata/public.decorator';
 import { AccessToken } from './entities/access-token.entity';
 import { LoginDto } from './entities/login.dto';
+import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { localAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')

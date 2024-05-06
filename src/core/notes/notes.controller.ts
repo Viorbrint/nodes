@@ -21,24 +21,16 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Note } from './entities/note.entity';
-import {
-  FilteringOptions,
-  FilteringParams,
-} from 'src/complex-prisma-query/decorators/filtering-params.decorator';
-import {
-  PaginationParams,
-  PaginationOptions,
-} from 'src/complex-prisma-query/decorators/pagination-params.decorator';
-import {
-  SortingParams,
-  SortingOptions,
-} from 'src/complex-prisma-query/decorators/sorting-params.decorator';
-import {
-  SearchingOptions,
-  SearchingParams,
-} from 'src/complex-prisma-query/decorators/searching-params.decorator';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { GetUser } from 'src/users/decorators/get-user.decorator';
+import { FilteringParams } from 'src/common/decorators/requests/filtering-params.decorator';
+import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
+import { FilteringOptions } from 'src/common/interfaces/filtering-options.interface';
+import { PaginationParams } from 'src/common/decorators/requests/pagination-params.decorator';
+import { SearchingParams } from 'src/common/decorators/requests/searching-params.decorator';
+import { SortingParams } from 'src/common/decorators/requests/sorting-params.decorator';
+import { PaginationOptions } from 'src/common/interfaces/pagination-options.interface';
+import { SearchingOptions } from 'src/common/interfaces/searching-options.interface';
+import { SortingOptions } from 'src/common/interfaces/sorting-options.interface';
 
 @ApiBearerAuth()
 @ApiTags('Notes')

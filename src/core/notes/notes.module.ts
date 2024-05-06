@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { NotesController } from './notes.controller';
-import { PrismaModule } from 'src/prisma/prisma.module';
-import { ComplexPrismaQueryModule } from 'src/complex-prisma-query/complex-prisma-query.module';
+import { ComplexPrismaQueryModule } from '../complex-prisma-query/complex-prisma-query.module';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   controllers: [NotesController],

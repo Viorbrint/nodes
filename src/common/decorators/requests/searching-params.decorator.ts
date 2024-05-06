@@ -4,11 +4,7 @@ import {
   ExecutionContext,
 } from '@nestjs/common';
 import { Request } from 'express';
-
-export interface SearchingOptions {
-  property: string;
-  searchString: string;
-}
+import { SearchingOptions } from 'src/common/interfaces/searching-options.interface';
 
 export const SearchingParams = createParamDecorator(
   (fields: string[], ctx: ExecutionContext): SearchingOptions => {
@@ -31,3 +27,4 @@ export const SearchingParams = createParamDecorator(
     return { property, searchString };
   },
 );
+export { SearchingOptions };
