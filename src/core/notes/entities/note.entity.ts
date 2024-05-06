@@ -25,8 +25,9 @@ export class Note {
       },
     ],
     description: 'Keywords / tags',
+    required: false,
   })
-  tags: Tag[];
+  tags?: Tag[];
 
   @ApiProperty({
     example: 'Home',

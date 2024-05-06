@@ -48,9 +48,19 @@ export class NotesService {
     });
   }
 
-  update(id: number, updateNoteDto: UpdateNoteDto, authorId: number) {
+  update(id: number, { tags, ...data }: UpdateNoteDto, authorId: number) {
     return this.prismaService.note.update({
-      data: updateNoteDto,
+      data: {
+        ...data,
+        tags: tags
+          ? {
+              connectOrCreate: tags.map(({ name }) => ({
+                where: { name },
+                create: { name },
+              })),
+            }
+          : {},
+      },
       where: { id, authorId },
       include: { tags: true },
     });
