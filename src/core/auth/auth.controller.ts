@@ -20,6 +20,7 @@ import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { localAuthGuard } from './guards/local-auth.guard';
 
+@Public()
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -29,7 +30,6 @@ export class AuthController {
   @ApiCreatedResponse({ type: AccessToken, description: 'Jwt access token' })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
   @UseGuards(localAuthGuard)
-  @Public()
   @Post('login')
   async login(@Body() _: LoginDto, @GetUser() user) {
     return this.authService.login(user);
@@ -38,7 +38,6 @@ export class AuthController {
   @ApiOperation({ summary: 'Registration' })
   @ApiCreatedResponse({ type: AccessToken, description: 'Jwt access token' })
   @ApiBadRequestResponse({ description: 'Email is already in use.' })
-  @Public()
   @Post('registration')
   async registration(@Body() createUserDto: CreateUserDto) {
     try {
