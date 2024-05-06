@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -19,6 +13,7 @@ import { LoginDto } from './entities/login.dto';
 import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { localAuthGuard } from './guards/local-auth.guard';
+import { AuthUser } from 'src/common/interfaces/auth-user.interface';
 
 @Public()
 @ApiTags('Auth')
@@ -40,12 +35,6 @@ export class AuthController {
   @ApiBadRequestResponse({ description: 'Email is already in use.' })
   @Post('registration')
   async registration(@Body() createUserDto: CreateUserDto) {
-    try {
-      return await this.authService.registration(createUserDto);
-    } catch (error) {
-      throw new BadRequestException(
-        `Email '${createUserDto.email}' is already in use.`,
-      );
-    }
+    return await this.authService.registration(createUserDto);
   }
 }
