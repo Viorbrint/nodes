@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -6,25 +6,41 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class TagsService {
   constructor(private prismaService: PrismaService) {}
-  create({ name }: CreateTagDto) {
+  async create({ name }: CreateTagDto) {
     return this.prismaService.tag.create({
       data: { name },
       include: { notes: true },
     });
   }
 
-  findAll() {
-    return this.prismaService.tag.findMany({ include: { notes: true } });
+  async findAll() {
+    const tags = await this.prismaService.tag.findMany({
+      include: { notes: true },
+    });
+
+    if (!tags.length) {
+      throw new NotFoundException(`No tags found.`);
+    }
+
+    return tags;
   }
 
-  findOne(id: number) {
-    return this.prismaService.tag.findUnique({
+  async findOne(id: number) {
+    const tag = await this.prismaService.tag.findUnique({
       where: { id },
       include: { notes: true },
     });
+
+    if (!tag) {
+      throw new NotFoundException(`Tag with id = ${id} does not exist.`);
+    }
+
+    return tag;
   }
 
-  update(id: number, { name }: UpdateTagDto) {
+  async update(id: number, { name }: UpdateTagDto) {
+    await this.findOne(id);
+
     return this.prismaService.tag.update({
       where: { id },
       data: { name },
@@ -32,7 +48,9 @@ export class TagsService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    await this.findOne(id);
+
     return this.prismaService.tag.delete({
       where: { id },
       include: { notes: true },

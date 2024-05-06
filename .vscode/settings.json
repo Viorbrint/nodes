@@ -5,6 +5,7 @@
     "notes",
     "auth",
     "docker",
-    "tags"
+    "tags",
+    "swagger"
   ]
 }

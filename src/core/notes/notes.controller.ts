@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  NotFoundException,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -21,7 +20,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Note } from './entities/note.entity';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { FilteringParams } from 'src/common/decorators/requests/filtering-params.decorator';
 import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
 import { FilteringOptions } from 'src/common/interfaces/filtering-options.interface';
@@ -41,7 +39,10 @@ export class NotesController {
   @ApiOperation({ summary: 'Create a new note' })
   @ApiCreatedResponse({ type: Note, description: 'Created' })
   @Post()
-  create(@Body() createNoteDto: CreateNoteDto, @GetUser('id') userId: number) {
+  async create(
+    @Body() createNoteDto: CreateNoteDto,
+    @GetUser('id') userId: number,
+  ) {
     return this.notesService.create(createNoteDto, userId);
   }
 
@@ -80,7 +81,7 @@ export class NotesController {
     @GetUser('id')
     userId: number,
   ) {
-    const response = await this.notesService.findAll(
+    return this.notesService.findAll(
       {
         pagination,
         sorting,
@@ -89,12 +90,6 @@ export class NotesController {
       },
       userId,
     );
-
-    if (!response.data.length) {
-      throw new NotFoundException(`No notes found matching your request.`);
-    }
-
-    return response;
   }
 
   @ApiOkResponse({ type: Note, description: 'Found' })
@@ -104,11 +99,7 @@ export class NotesController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser('id') userId: number,
   ) {
-    const note = await this.notesService.findOne(id, userId);
-    if (!note) {
-      throw new NotFoundException(`Note with id = ${id} does not exist.`);
-    }
-    return note;
+    return this.notesService.findOne(id, userId);
   }
 
   @ApiOkResponse({ type: Note, description: 'Updated' })
@@ -119,11 +110,6 @@ export class NotesController {
     @Body() updateNoteDto: UpdateNoteDto,
     @GetUser('id') userId: number,
   ) {
-    const note = await this.notesService.findOne(id, userId);
-    if (!note) {
-      throw new NotFoundException(`Note with id = ${id} does not exist.`);
-    }
-
     return this.notesService.update(id, updateNoteDto, userId);
   }
 
@@ -134,15 +120,6 @@ export class NotesController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser('id') userId: number,
   ) {
-    try {
-      const note = await this.notesService.remove(id, userId);
-      return note;
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        throw new NotFoundException(`Note with id = ${id} does not exist.`);
-      } else {
-        throw error;
-      }
-    }
+    return this.notesService.remove(id, userId);
   }
 }
