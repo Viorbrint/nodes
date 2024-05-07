@@ -70,7 +70,6 @@ export class TagsService {
   private async existById(id: number, authorId: number): Promise<boolean> {
     const tag = await this.prismaService.tag.findUnique({
       where: { id, authorId },
-      include: { notes: true },
     });
 
     return tag ? true : false;
@@ -79,7 +78,6 @@ export class TagsService {
   private async existByName(name: string, authorId: number): Promise<boolean> {
     const tag = await this.prismaService.tag.findUnique({
       where: { name, authorId },
-      include: { notes: true },
     });
 
     return tag ? true : false;
