@@ -61,7 +61,9 @@ export class NotesService {
   }
 
   async update(id: number, { tags, ...data }: UpdateNoteDto, authorId: number) {
-    await this.findOne(id, authorId);
+    if (!(await this.existById(id, authorId))) {
+      throw new NotFoundException(`Can't update a note that doesn't exist.`);
+    }
 
     return this.prismaService.note.update({
       data: {
@@ -81,11 +83,24 @@ export class NotesService {
   }
 
   async remove(id: number, authorId) {
-    await this.findOne(id, authorId);
+    if (!(await this.existById(id, authorId))) {
+      throw new NotFoundException(`Can't delete a note that doesn't exist.`);
+    }
 
     return this.prismaService.note.delete({
       where: { id, authorId },
       include: { tags: true },
     });
+  }
+
+  private async existById(id: number, authorId: number): Promise<boolean> {
+    const note = await this.prismaService.note.findUnique({
+      where: {
+        id,
+        authorId,
+      },
+    });
+
+    return note ? true : false;
   }
 }
