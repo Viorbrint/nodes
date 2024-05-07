@@ -20,8 +20,8 @@ export class NotesService {
         tags: tags
           ? {
               connectOrCreate: tags.map(({ name }) => ({
-                where: { name },
-                create: { name },
+                where: { name, authorId },
+                create: { name, authorId },
               })),
             }
           : {},
@@ -69,8 +69,8 @@ export class NotesService {
         tags: tags
           ? {
               connectOrCreate: tags.map(({ name }) => ({
-                where: { name },
-                create: { name },
+                where: { name, authorId },
+                create: { name, authorId },
               })),
             }
           : {},

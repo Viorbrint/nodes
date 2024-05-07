@@ -19,6 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Tag } from './entities/tag.entity';
+import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Tags')
@@ -29,22 +30,28 @@ export class TagsController {
   @ApiOperation({ summary: 'Create a new tag' })
   @ApiCreatedResponse({ type: Tag, description: 'Created' })
   @Post()
-  async create(@Body() createTagDto: CreateTagDto) {
-    return this.tagsService.create(createTagDto);
+  async create(
+    @Body() createTagDto: CreateTagDto,
+    @GetUser('id') userId: number,
+  ) {
+    return this.tagsService.create(createTagDto, userId);
   }
 
   @ApiOkResponse({ type: [Tag], description: 'Found' })
   @ApiOperation({ summary: 'Getting a list of tags' })
   @Get()
-  async findAll() {
-    return this.tagsService.findAll();
+  async findAll(@GetUser('id') userId: number) {
+    return this.tagsService.findAll(userId);
   }
 
   @ApiOkResponse({ type: Tag, description: 'Found' })
   @ApiOperation({ summary: 'Receiving a tag by its ID' })
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.tagsService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('id') userId: number,
+  ) {
+    return this.tagsService.findOne(id, userId);
   }
 
   @ApiOkResponse({ type: Tag, description: 'Updated' })
@@ -53,14 +60,18 @@ export class TagsController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTagDto: UpdateTagDto,
+    @GetUser('id') userId: number,
   ) {
-    return this.tagsService.update(id, updateTagDto);
+    return this.tagsService.update(id, updateTagDto, userId);
   }
 
   @ApiOkResponse({ type: Tag, description: 'Deleted' })
   @ApiOperation({ summary: 'Deleting a tag' })
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.tagsService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('id') userId: number,
+  ) {
+    return this.tagsService.remove(id, userId);
   }
 }

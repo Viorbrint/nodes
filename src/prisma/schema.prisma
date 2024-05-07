@@ -27,11 +27,14 @@ model User {
   email    String @unique
 
   notes Note[]
+  tags  Tag[]
 }
 
 model Tag {
   id   Int    @id @default(autoincrement())
   name String @unique
 
-  notes Note[]
+  notes    Note[]
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId Int
 }
