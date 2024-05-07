@@ -7,7 +7,10 @@ import { Request } from 'express';
 import { SortingOptions } from '../../interfaces/sorting-options.interface';
 
 export const SortingParams = createParamDecorator(
-  (fields: string[], ctx: ExecutionContext): SortingOptions => {
+  <EntityType>(
+    fields: (keyof EntityType)[],
+    ctx: ExecutionContext,
+  ): SortingOptions => {
     const req: Request = ctx.switchToHttp().getRequest();
     const sort = req.query.sort as string;
     if (!sort) {
@@ -20,7 +23,7 @@ export const SortingParams = createParamDecorator(
     }
 
     const [property, direction] = sort.split(':');
-    if (!fields.includes(property)) {
+    if (!fields.includes(property as keyof EntityType)) {
       throw new BadRequestException(`Invalid sort property: ${property}`);
     }
 

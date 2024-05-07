@@ -17,7 +17,10 @@ enum FilterRule {
 }
 
 export const FilteringParams = createParamDecorator(
-  (fields: string[], ctx: ExecutionContext): FilteringOptions => {
+  <EntityType>(
+    fields: (keyof EntityType)[],
+    ctx: ExecutionContext,
+  ): FilteringOptions => {
     const req: Request = ctx.switchToHttp().getRequest();
     const filter = req.query.filter as string;
     if (!filter) {
@@ -34,7 +37,7 @@ export const FilteringParams = createParamDecorator(
     }
 
     const [property, rule, value] = filter.split(':');
-    if (!fields.includes(property)) {
+    if (!fields.includes(property as keyof EntityType)) {
       throw new BadRequestException(`Invalid filter property: ${property}`);
     }
     if (!Object.values(FilterRule).includes(rule as FilterRule)) {

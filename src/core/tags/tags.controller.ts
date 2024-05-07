@@ -56,7 +56,7 @@ export class TagsController {
   async findAll(
     @PaginationParams()
     pagination: PaginationOptions,
-    @SearchingParams(['name'])
+    @SearchingParams<Tag>(['name'])
     searching: SearchingOptions,
     @GetUser('id')
     userId: number,

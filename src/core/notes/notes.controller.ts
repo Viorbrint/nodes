@@ -72,11 +72,11 @@ export class NotesController {
   async findAll(
     @PaginationParams()
     pagination: PaginationOptions,
-    @SortingParams(['name', 'createdAt', 'location'])
+    @SortingParams<Note>(['name', 'createdAt', 'location'])
     sorting: SortingOptions,
-    @FilteringParams(['name', 'createdAt', 'location'])
+    @FilteringParams<Note>(['name', 'createdAt', 'location'])
     filtering: FilteringOptions,
-    @SearchingParams(['name', 'location', 'content'])
+    @SearchingParams<Note>(['name', 'content', 'location'])
     searching: SearchingOptions,
     @GetUser('id')
     userId: number,
