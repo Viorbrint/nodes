@@ -6,7 +6,12 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class TagsService {
   constructor(private prismaService: PrismaService) {}
+
   async create({ name }: CreateTagDto, authorId: number) {
+    if (await this.existByName(name, authorId)) {
+      throw new NotFoundException(`This tag already exists.`);
+    }
+
     return this.prismaService.tag.create({
       data: { name, authorId },
       include: { notes: true },
@@ -40,7 +45,9 @@ export class TagsService {
   }
 
   async update(id: number, { name }: UpdateTagDto, authorId: number) {
-    await this.findOne(id, authorId);
+    if (!(await this.existById(id, authorId))) {
+      throw new NotFoundException(`Can't update a tag that doesn't exist.`);
+    }
 
     return this.prismaService.tag.update({
       where: { id, authorId },
@@ -50,11 +57,31 @@ export class TagsService {
   }
 
   async remove(id: number, authorId: number) {
-    await this.findOne(id, authorId);
+    if (!(await this.existById(id, authorId))) {
+      throw new NotFoundException(`Can't delete a tag that doesn't exist.`);
+    }
 
     return this.prismaService.tag.delete({
       where: { id, authorId },
       include: { notes: true },
     });
+  }
+
+  private async existById(id: number, authorId: number): Promise<boolean> {
+    const tag = await this.prismaService.tag.findUnique({
+      where: { id, authorId },
+      include: { notes: true },
+    });
+
+    return tag ? true : false;
+  }
+
+  private async existByName(name: string, authorId: number): Promise<boolean> {
+    const tag = await this.prismaService.tag.findUnique({
+      where: { name, authorId },
+      include: { notes: true },
+    });
+
+    return tag ? true : false;
   }
 }
