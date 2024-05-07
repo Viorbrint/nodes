@@ -35,6 +35,7 @@ export class NotesService {
       this.prismaService.note,
       options,
       authorId,
+      { include: { tags: true } },
     );
 
     if (!result.data.length) {

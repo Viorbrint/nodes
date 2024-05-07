@@ -6,6 +6,7 @@
     "auth",
     "docker",
     "tags",
-    "swagger"
+    "swagger",
+    "complex-query"
   ]
 }

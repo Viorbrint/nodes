@@ -12,6 +12,7 @@ export class ComplexPrismaQueryService {
     model,
     { pagination, sorting, filtering, searching }: QueryOptions,
     authorId: number = null,
+    extraOptions,
   ) {
     const sort = sorting ? this.sortOptions(sorting) : {};
     const filter = filtering ? this.filterOptions(filtering) : {};
@@ -29,7 +30,7 @@ export class ComplexPrismaQueryService {
     const skip = limit * (page - 1);
     const [total, data] = await Promise.all([
       model.count(prismaArgs),
-      model.findMany({ skip, take: limit, ...prismaArgs }),
+      model.findMany({ skip, take: limit, ...prismaArgs, ...extraOptions }),
     ]);
     const totalPages = Math.ceil(total / limit);
 
