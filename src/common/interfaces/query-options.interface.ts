@@ -5,7 +5,7 @@ import { SortingOptions } from './sorting-options.interface';
 
 export interface QueryOptions {
   pagination: PaginationOptions;
-  sorting: SortingOptions;
-  filtering: FilteringOptions;
-  searching: SearchingOptions;
+  sorting?: SortingOptions;
+  filtering?: FilteringOptions;
+  searching?: SearchingOptions;
 }
