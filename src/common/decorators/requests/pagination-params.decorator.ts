@@ -4,7 +4,7 @@ import {
   createParamDecorator,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { PaginationOptions } from 'src/common/interfaces/pagination-options.interface';
+import { PaginationOptions } from '../../interfaces/pagination-options.interface';
 
 export const PaginationParams = createParamDecorator(
   (data, ctx: ExecutionContext): PaginationOptions => {

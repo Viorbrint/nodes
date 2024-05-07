@@ -3,7 +3,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { ComplexPrismaQueryService } from '../complex-prisma-query/complex-prisma-query.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { QueryOptions } from 'src/common/interfaces/query-options.interface';
+import { QueryOptions } from '@common/interfaces/query-options.interface';
 
 @Injectable()
 export class NotesService {

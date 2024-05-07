@@ -4,7 +4,7 @@ import {
   ExecutionContext,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { SortingOptions } from 'src/common/interfaces/sorting-options.interface';
+import { SortingOptions } from '../../interfaces/sorting-options.interface';
 
 export const SortingParams = createParamDecorator(
   (fields: string[], ctx: ExecutionContext): SortingOptions => {

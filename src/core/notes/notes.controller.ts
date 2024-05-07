@@ -20,15 +20,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Note } from './entities/note.entity';
-import { FilteringParams } from 'src/common/decorators/requests/filtering-params.decorator';
-import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
-import { FilteringOptions } from 'src/common/interfaces/filtering-options.interface';
-import { PaginationParams } from 'src/common/decorators/requests/pagination-params.decorator';
-import { SearchingParams } from 'src/common/decorators/requests/searching-params.decorator';
-import { SortingParams } from 'src/common/decorators/requests/sorting-params.decorator';
-import { PaginationOptions } from 'src/common/interfaces/pagination-options.interface';
-import { SearchingOptions } from 'src/common/interfaces/searching-options.interface';
-import { SortingOptions } from 'src/common/interfaces/sorting-options.interface';
+import { FilteringParams } from '@common/decorators/requests/filtering-params.decorator';
+import { GetUser } from '@common/decorators/requests/get-user.decorator';
+import { FilteringOptions } from '@common/interfaces/filtering-options.interface';
+import { PaginationParams } from '@common/decorators/requests/pagination-params.decorator';
+import { SearchingParams } from '@common/decorators/requests/searching-params.decorator';
+import { SortingParams } from '@common/decorators/requests/sorting-params.decorator';
+import { PaginationOptions } from '@common/interfaces/pagination-options.interface';
+import { SearchingOptions } from '@common/interfaces/searching-options.interface';
+import { SortingOptions } from '@common/interfaces/sorting-options.interface';
 
 @ApiBearerAuth()
 @ApiTags('Notes')

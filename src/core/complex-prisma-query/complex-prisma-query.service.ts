@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { SortingOptions } from '../../common/decorators/requests/sorting-params.decorator';
-import { FilteringOptions } from '../../common/decorators/requests/filtering-params.decorator';
-import { SearchingOptions } from '../../common/decorators/requests/searching-params.decorator';
-import { QueryOptions } from 'src/common/interfaces/query-options.interface';
+import { SortingOptions } from '@common/decorators/requests/sorting-params.decorator';
+import { FilteringOptions } from '@common/decorators/requests/filtering-params.decorator';
+import { SearchingOptions } from '@common/decorators/requests/searching-params.decorator';
+import { QueryOptions } from '@common/interfaces/query-options.interface';
 
 @Injectable()
 export class ComplexPrismaQueryService {

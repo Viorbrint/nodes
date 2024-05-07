@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Tag } from 'src/core/tags/entities/tag.entity';
+import { Tag } from '@core/tags/entities/tag.entity';
 
 export class Note {
   @ApiProperty({ example: '42', description: 'Note id' })

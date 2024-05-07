@@ -8,7 +8,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { CreateTagDto } from 'src/core/tags/dto/create-tag.dto';
+import { CreateTagDto } from '@core/tags/dto/create-tag.dto';
 
 export class CreateNoteDto {
   @IsNotEmpty()

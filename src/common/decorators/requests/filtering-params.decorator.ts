@@ -4,7 +4,7 @@ import {
   ExecutionContext,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { FilteringOptions } from 'src/common/interfaces/filtering-options.interface';
+import { FilteringOptions } from '../../interfaces/filtering-options.interface';
 
 // valid filter rules
 enum FilterRule {

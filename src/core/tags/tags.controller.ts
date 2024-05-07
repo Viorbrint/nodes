@@ -19,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Tag } from './entities/tag.entity';
-import { GetUser } from 'src/common/decorators/requests/get-user.decorator';
+import { GetUser } from '@common/decorators/requests/get-user.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Tags')
