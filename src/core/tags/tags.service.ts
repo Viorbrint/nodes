@@ -2,10 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { ComplexPrismaQueryService } from '../complex-prisma-query/complex-prisma-query.service';
+import { QueryOptions } from '@/common/interfaces/query-options.interface';
 
 @Injectable()
 export class TagsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private complexPrismaQueryService: ComplexPrismaQueryService,
+  ) {}
 
   async create({ name }: CreateTagDto, authorId: number) {
     if (await this.existByName(name, authorId)) {
@@ -18,17 +23,19 @@ export class TagsService {
     });
   }
 
-  async findAll(authorId: number) {
-    const tags = await this.prismaService.tag.findMany({
-      where: { authorId },
-      include: { notes: true },
-    });
+  async findAll(options: QueryOptions, authorId: number) {
+    const result = await this.complexPrismaQueryService.query(
+      this.prismaService.tag,
+      options,
+      authorId,
+      { include: { notes: true } },
+    );
 
-    if (!tags.length) {
-      throw new NotFoundException(`No tags found.`);
+    if (!result.data.length) {
+      throw new NotFoundException(`No tags found matching your request.`);
     }
 
-    return tags;
+    return result;
   }
 
   async findOne(id: number, authorId: number) {

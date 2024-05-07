@@ -16,10 +16,15 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { Tag } from './entities/tag.entity';
 import { GetUser } from '@common/decorators/requests/get-user.decorator';
+import { PaginationParams } from '@common/decorators/requests/pagination-params.decorator';
+import { SearchingParams } from '@common/decorators/requests/searching-params.decorator';
+import { PaginationOptions } from '@common/interfaces/pagination-options.interface';
+import { SearchingOptions } from '@common/interfaces/searching-options.interface';
 
 @ApiBearerAuth()
 @ApiTags('Tags')
@@ -39,9 +44,30 @@ export class TagsController {
 
   @ApiOkResponse({ type: [Tag], description: 'Found' })
   @ApiOperation({ summary: 'Getting a list of tags' })
+  @ApiQuery({ name: 'page', example: 1 })
+  @ApiQuery({ name: 'limit', example: 5, description: 'maximum: 100' })
+  @ApiQuery({
+    name: 'search',
+    example: 'name:shop',
+    required: false,
+    description: 'name:searchString',
+  })
   @Get()
-  async findAll(@GetUser('id') userId: number) {
-    return this.tagsService.findAll(userId);
+  async findAll(
+    @PaginationParams()
+    pagination: PaginationOptions,
+    @SearchingParams(['name'])
+    searching: SearchingOptions,
+    @GetUser('id')
+    userId: number,
+  ) {
+    return this.tagsService.findAll(
+      {
+        pagination,
+        searching,
+      },
+      userId,
+    );
   }
 
   @ApiOkResponse({ type: Tag, description: 'Found' })
