@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { FilteringOptions } from '../../interfaces/filtering-options.interface';
+import { SelectFields } from '@/common/types/select-fields.type';
 
 // valid filter rules
 enum FilterRule {
@@ -17,7 +18,10 @@ enum FilterRule {
 }
 
 export const FilteringParams = createParamDecorator(
-  (fields: string[], ctx: ExecutionContext): FilteringOptions => {
+  <EntityType>(
+    fields: SelectFields<EntityType>,
+    ctx: ExecutionContext,
+  ): FilteringOptions => {
     const req: Request = ctx.switchToHttp().getRequest();
     const filter = req.query.filter as string;
     if (!filter) {
@@ -34,7 +38,7 @@ export const FilteringParams = createParamDecorator(
     }
 
     const [property, rule, value] = filter.split(':');
-    if (!fields.includes(property)) {
+    if (!Object.keys(fields).includes(property)) {
       throw new BadRequestException(`Invalid filter property: ${property}`);
     }
     if (!Object.values(FilterRule).includes(rule as FilterRule)) {

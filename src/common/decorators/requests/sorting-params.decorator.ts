@@ -5,9 +5,13 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { SortingOptions } from '../../interfaces/sorting-options.interface';
+import { SelectFields } from '@/common/types/select-fields.type';
 
 export const SortingParams = createParamDecorator(
-  (fields: string[], ctx: ExecutionContext): SortingOptions => {
+  <EntityType>(
+    fields: SelectFields<EntityType>,
+    ctx: ExecutionContext,
+  ): SortingOptions => {
     const req: Request = ctx.switchToHttp().getRequest();
     const sort = req.query.sort as string;
     if (!sort) {
@@ -20,7 +24,7 @@ export const SortingParams = createParamDecorator(
     }
 
     const [property, direction] = sort.split(':');
-    if (!fields.includes(property)) {
+    if (!Object.keys(fields).includes(property)) {
       throw new BadRequestException(`Invalid sort property: ${property}`);
     }
 

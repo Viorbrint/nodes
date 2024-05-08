@@ -29,6 +29,9 @@ import { SortingParams } from '@common/decorators/requests/sorting-params.decora
 import { PaginationOptions } from '@common/interfaces/pagination-options.interface';
 import { SearchingOptions } from '@common/interfaces/searching-options.interface';
 import { SortingOptions } from '@common/interfaces/sorting-options.interface';
+import { sortingFields } from './complexQueryFields/sorting-fields';
+import { searchingFields } from './complexQueryFields/searching-fields';
+import { filteringFields } from './complexQueryFields/filtering-fields';
 
 @ApiBearerAuth()
 @ApiTags('Notes')
@@ -72,11 +75,11 @@ export class NotesController {
   async findAll(
     @PaginationParams()
     pagination: PaginationOptions,
-    @SortingParams(['name', 'createdAt', 'location'])
+    @SortingParams<Note>(sortingFields)
     sorting: SortingOptions,
-    @FilteringParams(['name', 'createdAt', 'location'])
+    @FilteringParams<Note>(filteringFields)
     filtering: FilteringOptions,
-    @SearchingParams(['name', 'location', 'content'])
+    @SearchingParams<Note>(searchingFields)
     searching: SearchingOptions,
     @GetUser('id')
     userId: number,
