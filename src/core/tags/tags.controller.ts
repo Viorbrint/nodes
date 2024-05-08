@@ -25,6 +25,7 @@ import { PaginationParams } from '@common/decorators/requests/pagination-params.
 import { SearchingParams } from '@common/decorators/requests/searching-params.decorator';
 import { PaginationOptions } from '@common/interfaces/pagination-options.interface';
 import { SearchingOptions } from '@common/interfaces/searching-options.interface';
+import { searchingFields } from './complexQueryFields/searching-fields';
 
 @ApiBearerAuth()
 @ApiTags('Tags')
@@ -56,7 +57,7 @@ export class TagsController {
   async findAll(
     @PaginationParams()
     pagination: PaginationOptions,
-    @SearchingParams<Tag>(['name'])
+    @SearchingParams<Tag>(searchingFields)
     searching: SearchingOptions,
     @GetUser('id')
     userId: number,

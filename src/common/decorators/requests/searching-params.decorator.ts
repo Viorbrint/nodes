@@ -5,10 +5,11 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { SearchingOptions } from '../../interfaces/searching-options.interface';
+import { SelectFields } from '@/common/types/select-fields.type';
 
 export const SearchingParams = createParamDecorator(
   <EntityType>(
-    fields: (keyof EntityType)[],
+    fields: SelectFields<EntityType>,
     ctx: ExecutionContext,
   ): SearchingOptions => {
     const req: Request = ctx.switchToHttp().getRequest();
@@ -23,7 +24,7 @@ export const SearchingParams = createParamDecorator(
     }
 
     const [property, searchString] = search.split(':');
-    if (!fields.includes(property as keyof EntityType)) {
+    if (!Object.keys(fields).includes(property)) {
       throw new BadRequestException(`Invalid search property: ${property}`);
     }
 
