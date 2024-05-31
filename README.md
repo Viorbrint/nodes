@@ -1,9 +1,6 @@
-## Запуск
+## Backend nodejs portfolio project
 
-1. Создаем .env файл по примеру из .env-example (или копируем его в .env) 
-2. docker compose up
-- Создает базу данных в соответствии со схемой в контейнере postgres
-- генерирует prisma clint и запускает приложение в контейнере server
+## Документация к API - /docs
 
 ## Функционал Web API ✅
 
